@@ -1,0 +1,5 @@
+.flaskenv
+.env.example
+.env
+.venv
+movie_library/__pycache__
