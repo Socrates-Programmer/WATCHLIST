@@ -46,11 +46,24 @@ html {
 }
 
 body {
+    display: flex;
+    flex-direction: column;
     /* Sets the shared font characteristics, so that that they can be inherited globally */
     font-family: "Public Sans", sans-serif;
     color: var(--text-dark);
     line-height: 1.45;
     background-color: var(--background-color);
+}
+
+.main {
+    flex-grow: 1;
+    padding: 3rem 1.5rem 2rem 1.5rem ;
+}
+
+@media screen and (min-width: 30em){
+    .main {
+        padding-top: 5rem;
+    }
 }
 
 .header {
@@ -72,8 +85,8 @@ body {
 .logo__name {
 margin-left: 0.5rem;
 text-transform: uppercase;
-font-weight: 600;
-font-size: 12px;
+font-weight: 800;
+font-size: 22px;
 }
 
 .nav-container {
@@ -116,13 +129,20 @@ color: inherit;
 .nav__item {
     
 font-weight: 600;
-letter-spacing: 1px;
+letter-spacing: 0.5px;
 text-transform: uppercase;
 }
 
 .logo__icon {
-    width: 2.5rem;
-    height: 2.5rem;
+    width: 2.5em;
+    height: 2.5em;
+}
+
+.footer {
+
+    padding: 1rem 0;
+    color: var(--text-muted);
+    text-align: center;
 }
 
   /* Button styles that we'll share across our site */

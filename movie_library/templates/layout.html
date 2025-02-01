@@ -1,4 +1,5 @@
 {% from "macros/nav.html" import header %}
+{% from "macros/footer.html" import footer %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -14,10 +15,12 @@
 
 </head>
 <body>
-    {{ header("2", "") }}
+    {{ header(session.get("email"), session.get("theme")) }}
     <main class="main">
         {% block main_content %} {% endblock %}
     </main>
     
+    {{ footer() }}
 </body>
 </html>
+
