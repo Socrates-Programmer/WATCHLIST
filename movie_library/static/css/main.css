@@ -11,6 +11,19 @@
     --border: 3px solid #000;
 }
 
+:root.dark-mode {
+    --text-dark: #fbf2f2;
+    --text-light: #000;
+    --text-muted: #595959;
+
+    --background-color: #1c2023;
+    --accent-colour: #f56565;
+    --accent-colour-2: #3bb54a;
+    --tag-colour: var(--accent-colour-2);
+
+    --border: 3px solid #fff;
+}
+
 .button {
     --background-color: #e2e8f0;
     --background-color-hover: #bdd1eb;
@@ -23,6 +36,11 @@
 .form__field,
 .nav__link {
     --border: 3px solid #f56565;
+}
+
+.nav__icon {
+    width: 32px;
+    height: 32px;
 }
 
 html {
