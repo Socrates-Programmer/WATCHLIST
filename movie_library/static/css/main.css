@@ -22,8 +22,15 @@
     --tag-colour: var(--accent-colour-2);
 
     --border: 3px solid #fff;
+
 }
 
+
+.nav__icon {
+    width: 32px;
+    height: 32px;
+    fill: var(--text-dark);
+}
 
 .button {
     --background-color: #e2e8f0;
