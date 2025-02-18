@@ -56,6 +56,13 @@ def movie(_id: str):
         movie = movie
     )
 
+@pages.get("/movie/<string:_id>/rate/")
+def rate_movie(_id):
+
+    rating = int(request.args.get("rating"))
+    current_app.db.movie.update_one({"_id": _id}, {"$set": {"rating": rating}})
+
+    return redirect(url_for(".movie", _id=_id))
 
 @pages.get("/toggle-theme")
 def toggle_theme():

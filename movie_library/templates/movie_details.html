@@ -7,6 +7,7 @@
 {% endblock %}
 
 {% block main_content %}
+
 <div class="container">
     <header class="movie__header">
         <div class="header__row">
@@ -14,7 +15,13 @@
             <div class="movie__name">
                 <h1>{{ movie.title }}</h1>
                 <div class="movie__rating">
-                    {{ movie.rating }}
+
+                    {% for i in range(5) %}
+                        <a class="rating__link" href="{{ url_for('pages.rate_movie', _id=movie._id, rating=i+1) }}">
+                            {{ star("star " + ("star--filled" if movie.rating > i else "")) }}
+                        </a>
+                    {% endfor %}
+
                 </div>
             </div>
 

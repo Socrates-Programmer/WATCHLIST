@@ -20,9 +20,7 @@ display: flex;
 align-items: center;
 }
 
-.movie__rating {
-margin-left: 1rem;
-}
+
 
 .movie__watched {
 display: flex;
@@ -90,4 +88,30 @@ grid-template-columns: repeat(2, 1fr);
 
 .list__item {
 margin-top: 1rem;
+}
+
+.rating__link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: unset;
+}
+
+.star {
+width: 1.5em;
+height: 1.5em;
+fill: #808080;
+}
+
+.rating__link:not(:first-of-type) {
+margin-left: 8px;
+}
+
+.movie__rating {
+    display: flex;
+margin-left: 1rem;
+}
+
+.star--filled {
+    fill: #ffd02a;
 }
