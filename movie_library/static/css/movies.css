@@ -49,7 +49,7 @@
     border-bottom: var(--border);
 }   
 .table__movieTitle {
-    font-weight: 600;
+    font-weight: 500;
 }
 
 .table__movieDirector {
