@@ -1,8 +1,11 @@
 import uuid
-from flask import Blueprint, render_template, session, redirect, request, current_app, url_for,abort
-from movie_library.forms import MovieForm
-from movie_library.models import Movie
+import datetime
+from flask import Blueprint, render_template, session, redirect, request, current_app, url_for,abort, flash
+from movie_library.forms import MovieForm, ExtendedMovieForm, registerForm
+from movie_library.models import Movie, User
 from dataclasses import asdict
+from passlib.hash import pbkdf2_sha256
+
 
 pages = Blueprint(
     "pages", __name__, template_folder = "templates", static_folder = "static"
@@ -56,13 +59,24 @@ def movie(_id: str):
         movie = movie
     )
 
-@pages.get("/movie/<string:_id>/rate/")
+@pages.get("/movie/<string:_id>/rate")
 def rate_movie(_id):
 
     rating = int(request.args.get("rating"))
     current_app.db.movie.update_one({"_id": _id}, {"$set": {"rating": rating}})
 
     return redirect(url_for(".movie", _id=_id))
+
+@pages.get("/movie/<string:_id>/watch")
+def watch_movie(_id):
+
+    current_app.db.movie.update_one(
+            {"_id": _id}, 
+            {"$set": {"last_watched": datetime.datetime.today()} }
+        )
+
+    return redirect(url_for(".movie", _id=_id))
+
 
 @pages.get("/toggle-theme")
 def toggle_theme():
@@ -74,3 +88,59 @@ def toggle_theme():
         session["theme"] = "dark"
     
     return redirect(request.args.get("current_page"))
+
+@pages.route("/edit/<string:_id>", methods=["GET", "POST"])
+def edit_movie(_id: str):
+    movie = Movie(**current_app.db.movie.find_one({"_id": _id}))
+    form = ExtendedMovieForm(obj=movie)
+    if form.validate_on_submit():
+        movie.title = form.title.data
+        movie.director = form.director.data
+        movie.year = form.year.data
+        movie.cast = form.cast.data
+        movie.series = form.series.data
+        movie.tags = form.tags.data
+        movie.description = form.description.data
+        movie.video_link = form.video_link.data
+
+        current_app.db.movie.update_one({"_id": movie._id}, {"$set": asdict(movie)})
+        return redirect(url_for(".movie", _id=movie._id))
+    return render_template("movie_form.html", movie=movie, form=form)
+
+@pages.route("/register", methods=["POST", "GET"])
+def register():
+    if session.get("email"):
+        return redirect(url_for(".index"))
+
+    form = registerForm()
+
+    if form.validate_on_submit():
+        # Verificar si el nombre de usuario ya existe
+        existing_user = current_app.db.user.find_one({"username": form.username.data})
+        if existing_user:
+            flash("El nombre de usuario ya está en uso. Por favor, elige otro.", "error")
+            return redirect(url_for(".register"))
+
+        # Verificar si el correo electrónico ya existe
+        existing_email = current_app.db.user.find_one({"email": form.email.data})
+        if existing_email:
+            flash("El correo electrónico ya está registrado. Por favor, utiliza otro.", "error")
+            return redirect(url_for(".register"))
+
+        # Crear el nuevo usuario
+        user = User(
+            _id=uuid.uuid4().hex,
+            username=form.username.data,
+            email=form.email.data,
+            password=pbkdf2_sha256.hash(form.password.data),
+        )
+
+        # Guardar el usuario en la base de datos
+        current_app.db.user.insert_one(asdict(user))
+
+        flash("Usuario registrado exitosamente", "success")
+        return redirect(url_for(".register"))
+
+    return render_template(
+        "register.html", title="Movies Watchlist - Register", form=form
+    )

@@ -57,11 +57,13 @@ margin-left: 3px;
 .movie__tags {
 list-style: none;
 display: flex;
+font-size: 90%;
 }
 
 .movie__tag {
-padding: 3px 8px;
+padding: 5px 8px;
 background-color: var(--tag-colour);
+border-radius: 4px;
 }
 
 .movie__tag:not(:first-of-type) {

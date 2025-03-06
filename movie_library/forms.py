@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms import IntegerField, StringField, SubmitField
-from wtforms.validators import InputRequired, NumberRange
+from wtforms import IntegerField, StringField, SubmitField, TextAreaField, PasswordField
+from wtforms.validators import InputRequired, NumberRange, Email, Length, EqualTo
+from wtforms import URLField
 
 
 class MovieForm(FlaskForm):
@@ -12,3 +13,56 @@ class MovieForm(FlaskForm):
 
     submit = SubmitField("Add Movie")
 
+class StringListField(TextAreaField):
+    def _value(self):
+        if self.data:
+            return "\n".join(self.data)
+        else:
+            return ""
+
+    def process_formdata(self, valuelist):
+        # checks valuelist contains at least 1 element, and the first element isn't falsy (i.e. empty string)
+        if valuelist and valuelist[0]:
+            self.data = [line.strip() for line in valuelist[0].split("\n")]
+        else:
+            self.data = []
+
+
+class ExtendedMovieForm(MovieForm):
+    cast = StringListField("Cast")
+    series = StringListField("Series")
+    tags = StringListField("Tags")
+    description = TextAreaField("Description")
+    video_link = URLField("Video link")
+
+    submit = SubmitField("Submit")
+
+
+
+class registerForm(FlaskForm):
+    username = StringField("Username", validators=[InputRequired()])
+    email = StringField("Email", validators=[InputRequired(), Email()])
+    
+    password = PasswordField(
+        "Password",
+        validators=[
+            InputRequired(),
+            Length(
+                min=4,
+                message="Your password must be at least 4 characters long.",
+            ),
+        ],
+    )
+
+    confirm_password = PasswordField(
+        "Confirm Password",
+        validators=[
+            InputRequired(),
+            EqualTo(
+                "password",
+                message="This password did not match the one in the password field.",
+            ),
+        ],
+    )
+
+    submit = SubmitField("Register")
