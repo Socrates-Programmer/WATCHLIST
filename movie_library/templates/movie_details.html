@@ -38,15 +38,17 @@
                 
                 <a class="movie__edit" href="{{ url_for('pages.edit_movie', _id=movie._id) }}">Edit {{ pencil("pencil") }}</a>
             </div>
-            {% if true %}
+
+            {% if movie.is_public == True %}
             <div>
-                <a href="#" class="movie__eye" title="Haz clic para hacer público u ocultar">{{ eye() }}</a>
+                <a href="{{ url_for('pages.toggle_public', _id = movie._id) }}" class="movie__eye" title="Haz clic para hacer público u ocultar">{{ eye() }}</a>
             </div>
             {% else %}
                 <div>
-                    <a href="#" class="movie__eye" title="Haz clic para hacer público u ocultar">{{ non_eye() }}</a>
+                    <a href="{{ url_for('pages.make_public', _id = movie._id) }}" class="movie__eye" title="Haz clic para hacer público u ocultar">{{ non_eye() }}</a>
                 </div>
             {% endif %}
+
         </div>
         <div class="header__row">
             <ul class="movie__tags">

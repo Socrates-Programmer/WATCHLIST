@@ -2,7 +2,7 @@ import uuid
 import datetime
 from flask import Blueprint, render_template, session, redirect, request, current_app, url_for,abort, flash
 from movie_library.forms import MovieForm, ExtendedMovieForm, registerForm, LoginForm
-from movie_library.models import Movie, User
+from movie_library.models import Movie, User, Public_Comment
 from dataclasses import asdict
 from passlib.hash import pbkdf2_sha256
 import functools
@@ -23,6 +23,7 @@ def login_required(route):
 
     return route_wrapper
 
+#***********INDEX************
 @pages.route("/")
 @login_required
 def index():
@@ -36,24 +37,46 @@ def index():
         title = "Movies Watchlist",
         movies_data = movies
         )
+#***********INDEX---END************
 
+#***********PUBLIC_RED*************
 @pages.route("/chat_publico")
 def public_chat():
-    form_movie = MovieForm()
 
-    if form_movie.validate_on_submit():
-        movie = Movie(
-            _id = uuid.uuid4().hex,
-            title =  form_movie.title.data,
-            director = form_movie.director.data,
-            year= form_movie.year.data,
-        )
-        current_app.db.movie.insert_one(asdict(movie))
-        return redirect(url_for(".public_chat"))
+    return render_template('chat_publico.html', movies_data = None, title = "Movies Watchlist" )
 
-    return render_template('chat_publico.html', form_movie=form_movie)
+@pages.route("/make_public/<string:_id>")
+def make_public(_id):
+    movie_data = current_app.db.movie.find_one({"_id": _id})
+    if not movie_data:
+        abort(404)
+
+    # Actualiza la visibilidad
+    current_app.db.movie.update_one(
+        {"_id": _id}, 
+        {"$set": {"is_public": True}}  # Cambia a un booleano
+    )
+
+    return redirect(url_for(".movie", _id=_id))
+
+@pages.route("/toggle_public/<string:_id>")
+def toggle_public(_id):
+    movie_data = current_app.db.movie.find_one({"_id": _id})
+    if not movie_data:
+        abort(404)
+
+    is_public = movie_data.get("is_public", False)  # Default False
+    current_app.db.movie.update_one(
+        {"_id": _id}, 
+        {"$set": {"is_public": not is_public}}  # Cambia el estado
+    )
+
+    return redirect(url_for(".movie", _id=_id))
+
+#***********PUBLIC_RED----END*************
 
 
+#************USER_LOBBY****************
 @pages.route("/add", methods=["GET", "POST"])
 @login_required
 def add_movie():
@@ -79,7 +102,6 @@ def add_movie():
         form=form)
 
 @pages.get("/movie/<string:_id>")
-
 def movie(_id: str):
 
     movie_data = current_app.db.movie.find_one({"_id": _id})
@@ -114,18 +136,6 @@ def watch_movie(_id):
 
     return redirect(url_for(".movie", _id=_id))
 
-
-@pages.get("/toggle-theme")
-def toggle_theme():
-    current_theme = session.get("theme")
-    if current_theme == "dark":
-        session["theme"] = "light"
-
-    else:
-        session["theme"] = "dark"
-    
-    return redirect(request.args.get("current_page"))
-
 @pages.route("/edit/<string:_id>", methods=["GET", "POST"])
 @login_required
 def edit_movie(_id: str):
@@ -145,6 +155,22 @@ def edit_movie(_id: str):
         return redirect(url_for(".movie", _id=movie._id))
     return render_template("movie_form.html", movie=movie, form=form)
 
+#************USER_LOBBY------------END****************
+
+#************DARK_LIGHT_MODE**********************
+@pages.get("/toggle-theme")
+def toggle_theme():
+    current_theme = session.get("theme")
+    if current_theme == "dark":
+        session["theme"] = "light"
+
+    else:
+        session["theme"] = "dark"
+    
+    return redirect(request.args.get("current_page"))
+#************DARK_LIGHT_MODE---------END**********************
+
+#****************FUCTIONS*********************
 @pages.route("/register", methods=["POST", "GET"])
 def register():
     if session.get("email"):
@@ -214,3 +240,5 @@ def logout():
     session["theme"] = current_theme
 
     return redirect(url_for(".login"))
+
+#****************FUCTIONS-----END*********************

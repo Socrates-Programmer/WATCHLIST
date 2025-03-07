@@ -15,6 +15,7 @@ class Movie:
     tags: list[str] = field(default_factory=list)   
     description: str = None
     video_link: str = None
+    is_public: bool = False
 
 
 @dataclass
@@ -24,10 +25,11 @@ class User:
     email: str
     password: str
     movies: list[str] = field(default_factory=list)
-    public_movie: list[str] = field(default_factory=list)
 
 @dataclass
 class Public_Comment:
+    _id: str
     movie_id: str
     user_inf: str
     comments: str
+    timestamp: datetime = field(default_factory=datetime.now)
