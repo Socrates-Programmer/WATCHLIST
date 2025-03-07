@@ -37,6 +37,22 @@ def index():
         movies_data = movies
         )
 
+@pages.route("/chat_publico")
+def public_chat():
+    form_movie = MovieForm()
+
+    if form_movie.validate_on_submit():
+        movie = Movie(
+            _id = uuid.uuid4().hex,
+            title =  form_movie.title.data,
+            director = form_movie.director.data,
+            year= form_movie.year.data,
+        )
+        current_app.db.movie.insert_one(asdict(movie))
+        return redirect(url_for(".public_chat"))
+
+    return render_template('chat_publico.html', form_movie=form_movie)
+
 
 @pages.route("/add", methods=["GET", "POST"])
 @login_required

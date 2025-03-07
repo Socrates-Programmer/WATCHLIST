@@ -43,10 +43,23 @@ text-decoration: none;
 align-items: center;
 margin-left: 1rem;
 color: inherit;
+
 }
 
 .movie__edit:hover {
 text-decoration: underline;
+}
+
+.movie__eye {
+text-decoration: none;
+align-items: center;
+margin-left: 1rem;
+color: inherit;
+}
+
+.movie__eye:hover {
+    text-decoration: underline;
+
 }
 
 .pencil {

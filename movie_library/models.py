@@ -24,3 +24,10 @@ class User:
     email: str
     password: str
     movies: list[str] = field(default_factory=list)
+    public_movie: list[str] = field(default_factory=list)
+
+@dataclass
+class Public_Comment:
+    movie_id: str
+    user_inf: str
+    comments: str

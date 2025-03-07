@@ -1,4 +1,4 @@
-{% from "macros/svgs.html" import star, pencil %}
+{% from "macros/svgs.html" import star, pencil, eye, non_eye %}
 
 {% extends "layout.html" %}
 
@@ -35,9 +35,18 @@
                 {% else %}
                     <p><a href="{{ url_for('pages.watch_movie', _id=movie._id) }}" class="watched__link">Not watched yet</a></p>
                 {% endif %}
+                
                 <a class="movie__edit" href="{{ url_for('pages.edit_movie', _id=movie._id) }}">Edit {{ pencil("pencil") }}</a>
             </div>
-            
+            {% if true %}
+            <div>
+                <a href="#" class="movie__eye" title="Haz clic para hacer público u ocultar">{{ eye() }}</a>
+            </div>
+            {% else %}
+                <div>
+                    <a href="#" class="movie__eye" title="Haz clic para hacer público u ocultar">{{ non_eye() }}</a>
+                </div>
+            {% endif %}
         </div>
         <div class="header__row">
             <ul class="movie__tags">
