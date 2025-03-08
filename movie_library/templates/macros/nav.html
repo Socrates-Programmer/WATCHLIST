@@ -15,6 +15,10 @@
 
         
         <nav class="nav">
+            <a href="{{ url_for('pages.how_to_add_links') }}" class="nav__link {{ 'nav__link--active' if request.path == url_for('pages.how_to_add_links') }}">
+                <span class="nav__item">How to add links</span>
+            </a>
+
             <a href="{{ url_for('pages.public_chat') }}" class="nav__link {{ 'nav__link--active' if request.path == url_for('pages.public_chat') }}">
                 <span class="nav__item">Chat Publico</span>
             </a>

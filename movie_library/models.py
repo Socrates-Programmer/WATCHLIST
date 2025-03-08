@@ -16,6 +16,7 @@ class Movie:
     description: str = None
     video_link: str = None
     is_public: bool = False
+    owner_comment: str = None
 
 
 @dataclass

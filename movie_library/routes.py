@@ -242,3 +242,11 @@ def logout():
     return redirect(url_for(".login"))
 
 #****************FUCTIONS-----END*********************
+
+
+#****************HOW TO ADD LINKS********************
+
+@pages.route("/how_to_add_links")
+def how_to_add_links():
+
+    return render_template("how_to_add_links.html")

@@ -21,8 +21,6 @@ align-items: center;
 font-size: 90%;
 }
 
-
-
 .movie__watched {
 display: flex;
 }
@@ -132,4 +130,10 @@ margin-left: 8px;
 
 .star--filled {
     fill: #ffd02a;
+}
+
+.img---add_links {
+    display: flex;
+    align-items: center; /* Centra verticalmente */
+    justify-content: center; /* Centra horizontalmente */
 }

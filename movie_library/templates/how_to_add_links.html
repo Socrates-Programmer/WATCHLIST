@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+
+{% block head_content %}
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/movie_details.css') }}">
+
+{% endblock %}
+
+{% block main_content %}
+
+<div class="img---add_links">
+    <img src="{{ url_for('static', filename='img/How_to_add_your_link.png') }}" alt="">
+</div>
+
+{% endblock %}

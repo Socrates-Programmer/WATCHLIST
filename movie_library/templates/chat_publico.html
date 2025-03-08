@@ -10,6 +10,7 @@
 
 <div class="title___chat">
     <h1 class="">Recomendaciones de la comunidad.</h1>
+    <h2 style="color: red;">( Aun estamos agregando esta funcionalidad )</h4>
 </div>
 
 {% if movies_data %}
@@ -40,10 +41,10 @@
             </tbody>
         </table>
     {% else %}
-        <p class="table__empty">You haven't added any movies yet. <a href="{{ url_for('pages.add_movie') }}" class="link">Add one!</a></p>
+        <p class="table__empty">You haven't added any movies yet. <a href="" class="link">Add one!</a></p>
     {% endif %}
     
-    <a href="{{ url_for('pages.add_movie') }}" class="button button--add">
+    <a href="" class="button button--add">
         <span>+</span>
     </a>
 
