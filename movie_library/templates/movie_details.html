@@ -60,15 +60,28 @@
     </header>
 
     {% if movie.video_link %}
+    {% set video_link = movie.video_link %}
+
+    {% if 'youtube.com' in video_link or 'youtu.be' in video_link %}
+        {% set video_id = video_link.split('v=')[-1].split('&')[0] if 'v=' in video_link else video_link.split('/')[-1] %}
+        {% set embed_link = "https://www.youtube.com/embed/" + video_id %}
+    {% elif 'vimeo.com' in video_link %}
+        {% set video_id = video_link.split('/')[-1] %}
+        {% set embed_link = "https://player.vimeo.com/video/" + video_id %}
+    {% else %}
+        {% set embed_link = video_link %}
+    {% endif %}
+
     <iframe
         class="movie__video"
-        src="{{ movie.video_link }}"
-        title="YouTube video player"
+        src="{{ embed_link }}"
+        title="Video player"
         frameborder="0"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowfullscreen>
     </iframe>
-    {% endif %}
+{% endif %}
+
 
     {% if movie.description %}
         <p class="movie__description">{{ movie.description }}</p>
